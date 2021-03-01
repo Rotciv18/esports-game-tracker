@@ -3,6 +3,7 @@ import { Card, Button } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as LivesActions } from '../../store/ducks/lives';
+import Loading from 'react-loading-animation';
 
 class Main extends Component {
 
@@ -12,26 +13,27 @@ class Main extends Component {
   }
 
   render() {
-    const a = [1, 2, 3];
+    const {lives} = this.props;
     return <>
       <h1>
         Lives Agora
       </h1>
-      {a.map(el => (
-        <Card style={{ width: '18rem', marginTop: '24px' }}>
-          <Card.Body>
-            <Card.Title>{el}</Card.Title>
-            <Card.Text>Mizera mizera</Card.Text>
-            <Button>Ir</Button>
-          </Card.Body>
-        </Card>
-      ))}
+      {lives.isLoading ? <Loading /> : (
+        lives.livesList.map(live => (
+          <Card key={live.id} style={{ width: '18rem', marginTop: '24px' }}>
+            <Card.Body>
+              <Card.Title>{live.league.name}</Card.Title>
+              {live.match ? (<Button href={`/events/${live.match.id}`} >Ir</Button>) : <></>}
+            </Card.Body>
+          </Card>
+        ))
+      )}
     </>
   }
 }
 
 const mapStateToProps = (state) => ({
-  lives: state.lives,
+  lives: state.lives
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(LivesActions, dispatch);

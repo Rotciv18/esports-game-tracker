@@ -6,19 +6,19 @@ export const { Types, Creators } = createActions({
 });
 
 const INITIAL_STATE = {
-  lives: [],
-  isLoading: false,
+  livesList: [],
+  isLoading: true,
 };
 
 const getLivesRequest = (state = INITIAL_STATE) => ({
   ...state,
-  loading: true,
+  isLoading: true,
 });
 
 const getLivesSuccess = (state = INITIAL_STATE, action) => ({
   ...state,
-  loading: false,
-  lives: [
+  isLoading: false,
+  livesList: [
     ...action.data,
   ],
 });
