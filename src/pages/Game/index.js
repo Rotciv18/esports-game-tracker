@@ -83,7 +83,7 @@ class Game extends Component {
           </tbody>
         </Table>
 
-        <Table>
+        <Table style={{ marginTop: '62px' }}>
           <thead>
             <tr>
               <td>Campeão</td>
