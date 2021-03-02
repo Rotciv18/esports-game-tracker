@@ -10,11 +10,10 @@ class Game extends Component {
 
   componentDidMount() {
     this.updateData();
-    setInterval(this.updateData, 10000);
+    setInterval(this.updateData, 2000);
   }
 
   updateData = () => {
-    console.log('EXECUTANDO AGORA');
     const { getGameRequest } = this.props;
     const { id } = this.props.match.params;
     const date = new Date();
