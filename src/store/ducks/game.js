@@ -14,7 +14,7 @@ const INITIAL_STATE = {
 
 const getGameRequest = (state = INITIAL_STATE) => ({
   ...state,
-  isLoading: true,
+  isLoading: false,
 });
 
 const getGameSuccess = (state = INITIAL_STATE, action) => ({
@@ -26,6 +26,7 @@ const getGameSuccess = (state = INITIAL_STATE, action) => ({
 
 const getGameFailure = (state = INITIAL_STATE, action) => ({
   ...state,
+  isLoading: false,
   startingDate: action.startingDate
 })
 

@@ -9,12 +9,29 @@ import { format, parseISO } from 'date-fns';
 class Game extends Component {
 
   componentDidMount() {
-    this.updateData();
+  
+    const { getGameRequest, startingDate } = this.props;
+
+    const { id } = this.props.match.params;
+    const date = new Date();
+    const seconds = date.getSeconds().toString();
+    date.setMilliseconds(0);
+    date.setSeconds(`${seconds[0] - 10}0`);
+
+    if (startingDate) {
+      getGameRequest(id, startingDate);
+      console.log(startingDate);
+    } else {
+      getGameRequest(id, date);
+      console.log(date.toISOString());
+    }
+
     setInterval(this.updateData, 2000);
   }
 
   updateData = () => {
     const { getGameRequest, startingDate } = this.props;
+
     const { id } = this.props.match.params;
     const date = new Date();
     const seconds = date.getSeconds().toString();
@@ -32,9 +49,11 @@ class Game extends Component {
 
   render() {
     const { game, isLoading } = this.props;
-    const frame = isLoading ? undefined : game.frames[game.frames.length - 1];
-    return isLoading ? <Loading /> : (
-      <>
+    const frame = game.frames ? game.frames[game.frames.length - 1] : undefined;
+
+    return <> 
+      {!frame ? <Loading /> : (
+        <>
         <h1>Dados capturados em: {format(parseISO(frame.rfc460Timestamp), 'dd-MM-yyyy HH:mm:ss')}</h1>
         <Table style={{ marginTop: '62px' }}>
           <thead>
@@ -131,11 +150,13 @@ class Game extends Component {
           </tbody>
         </Table>
       </>
-    )
+      )}
+    </>
   }
 }
 
 const mapStateToProps = (state) => ({
+  gameDuck: state.game,
   game: state.game.game,
   isLoading: state.game.isLoading,
   startingDate: state.game.startingDate
