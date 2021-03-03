@@ -14,21 +14,26 @@ class Game extends Component {
   }
 
   updateData = () => {
-    const { getGameRequest } = this.props;
+    const { getGameRequest, startingDate } = this.props;
     const { id } = this.props.match.params;
     const date = new Date();
     const seconds = date.getSeconds().toString();
     date.setMilliseconds(0);
-    date.setSeconds(`${seconds[0] - 10}0`);
-    getGameRequest(id, date);
-    console.log(date.toISOString());
+    date.setSeconds(`${seconds[0]}0`);
+
+    if (startingDate) {
+      getGameRequest(id, startingDate);
+      console.log(startingDate);
+    } else {
+      getGameRequest(id, date);
+      console.log(date.toISOString());
+    }
   }
 
   render() {
     const { game, isLoading } = this.props;
     const frame = isLoading ? undefined : game.frames[game.frames.length - 1];
     return isLoading ? <Loading /> : (
-      // <Button onClick={() => console.log(game)}>Eae mennnnnnnnnnnnnn</Button>
       <>
         <h1>Dados capturados em: {format(parseISO(frame.rfc460Timestamp), 'dd-MM-yyyy HH:mm:ss')}</h1>
         <Table style={{ marginTop: '62px' }}>
@@ -132,7 +137,8 @@ class Game extends Component {
 
 const mapStateToProps = (state) => ({
   game: state.game.game,
-  isLoading: state.game.isLoading
+  isLoading: state.game.isLoading,
+  startingDate: state.game.startingDate
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(GameActions, dispatch);
