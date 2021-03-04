@@ -123,7 +123,7 @@ class Game extends Component {
           <tbody>
             {frame.blueTeam.participants.map(player => (
               <tr>
-                <td>{game.gameMetadata.blueTeamMetadata.participantMetadata[player.participantId - 1].championId}</td>
+                <td style={{color: 'blue'}}>{game.gameMetadata.blueTeamMetadata.participantMetadata[player.participantId - 1].championId}</td>
                 <td>{player.totalGold}</td>
                 <td>{player.level}</td>
                 <td>{player.kills}</td>
@@ -134,9 +134,10 @@ class Game extends Component {
                 <td>{player.maxHealth}</td>
               </tr>
             ))}
+            <hr />
             {frame.redTeam.participants.map(player => (
               <tr>
-                <td>{game.gameMetadata.redTeamMetadata.participantMetadata[player.participantId - 6].championId}</td>
+                <td style={{color: 'red'}}>{game.gameMetadata.redTeamMetadata.participantMetadata[player.participantId - 6].championId}</td>
                 <td>{player.totalGold}</td>
                 <td>{player.level}</td>
                 <td>{player.kills}</td>
