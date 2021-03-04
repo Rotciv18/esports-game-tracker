@@ -16,7 +16,6 @@ function* getGame(action) {
     yield put(GameActions.getGameSuccess(response.data));
   } catch (error) {
     // console.log(error);
-    console.log('OI');
 
     yield put(GameActions.getGameFailure(action.startingTime));
   }

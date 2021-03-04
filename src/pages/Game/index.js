@@ -55,7 +55,7 @@ class Game extends Component {
       {!frame ? <Loading /> : (
         <>
         <h1>Dados capturados em: {format(parseISO(frame.rfc460Timestamp), 'dd-MM-yyyy HH:mm:ss')}</h1>
-        <Table style={{ marginTop: '62px' }}>
+        <Table style={{ marginTop: '62px' }} striped bordered hover>
           <thead>
             <tr>
               <th>Azul</th>
@@ -81,7 +81,7 @@ class Game extends Component {
         </Table>
 
 
-        <Table style={{ marginTop: '62px' }}>
+        <Table style={{ marginTop: '62px' }} striped bordered hover>
           <thead>
             <tr>
               <th>Vermelho</th>
@@ -106,7 +106,7 @@ class Game extends Component {
           </tbody>
         </Table>
 
-        <Table style={{ marginTop: '62px' }}>
+        <Table style={{ marginTop: '62px' }} striped bordered hover>
           <thead>
             <tr>
               <td>Campeão</td>
