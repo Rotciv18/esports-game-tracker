@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import { Creators as GameActions } from '../../store/ducks/game';
 import Loading from 'react-loading-animation';
 import { format, parseISO } from 'date-fns';
+import HealthBar from './components/HealthBar';
 
 class Game extends Component {
 
   componentDidMount() {
-  
+
     const { getGameRequest, startingDate } = this.props;
 
     const { id } = this.props.match.params;
@@ -44,110 +45,105 @@ class Game extends Component {
     }
   }
 
+  getPercentage(initialValue, finalValue) {
+    console.log(`${finalValue} ----- ${initialValue}`)
+    // console.log('Returning ' + Math.trunc(((finalValue - initialValue) / initialValue * 100) * - 1));
+    return Math.trunc(((finalValue - initialValue) / initialValue * 100) + 100);
+  }
+
   render() {
     const { game } = this.props;
     const frame = game.frames ? game.frames[game.frames.length - 1] : undefined;
+    const redTeamKillsColor = game.frames ? (frame.blueTeam.totalKills > frame.redTeam.totalKills ? 'orange' : 'chartreuse') : undefined;
+    const blueTeamKillsColor = redTeamKillsColor === 'orange' ? 'chartreuse' : 'orange';
 
-    return <> 
+    return <>
       {!frame ? <Loading /> : (
         <>
-        <h1>Dados capturados em: {format(parseISO(frame.rfc460Timestamp), 'dd-MM-yyyy HH:mm:ss')}</h1>
-        <Table style={{ marginTop: '62px' }} striped bordered hover>
-          <thead>
-            <tr>
-              <th>Azul</th>
-              <th>Gold Total</th>
-              <th>Inibidores</th>
-              <th>Torres</th>
-              <th>Barons</th>
-              <th>Kills</th>
-              <th>Dragões</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              <td>{frame.blueTeam.totalGold}</td>
-              <td>{frame.blueTeam.inhibitors}</td>
-              <td>{frame.blueTeam.towers}</td>
-              <td>{frame.blueTeam.barons}</td>
-              <td>{frame.blueTeam.totalKills}</td>
-              <td>{frame.blueTeam.dragons.length}</td>
-            </tr>
-          </tbody>
-        </Table>
-
-
-        <Table style={{ marginTop: '62px' }} striped bordered hover>
-          <thead>
-            <tr>
-              <th>Vermelho</th>
-              <th>Gold Total</th>
-              <th>Inibidores</th>
-              <th>Torres</th>
-              <th>Barons</th>
-              <th>Kills</th>
-              <th>Dragões</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              <td>{frame.redTeam.totalGold}</td>
-              <td>{frame.redTeam.inhibitors}</td>
-              <td>{frame.redTeam.towers}</td>
-              <td>{frame.redTeam.barons}</td>
-              <td>{frame.redTeam.totalKills}</td>
-              <td>{frame.redTeam.dragons.length}</td>
-            </tr>
-          </tbody>
-        </Table>
-
-        <Table style={{ marginTop: '62px' }} striped bordered hover>
-          <thead>
-            <tr>
-              <td>Campeão</td>
-              <td>Gold total</td>
-              <td>Level</td>
-              <td>Kills</td>
-              <td>Mortes</td>
-              <td>Assists</td>
-              <td>CS</td>
-              <td>HP atual</td>
-              <td>HP máximo</td>
-            </tr>
-          </thead>
-          <tbody>
-            {frame.blueTeam.participants.map(player => (
+          <h1>Dados capturados em: {format(parseISO(frame.rfc460Timestamp), 'dd-MM-yyyy HH:mm:ss')}</h1>
+          <Table style={{ marginTop: '62px' }} striped bordered hover variant='dark' responsive='md'>
+            <thead>
               <tr>
-                <td style={{color: 'blue'}}>{game.gameMetadata.blueTeamMetadata.participantMetadata[player.participantId - 1].championId}</td>
-                <td>{player.totalGold}</td>
-                <td>{player.level}</td>
-                <td>{player.kills}</td>
-                <td>{player.deaths}</td>
-                <td>{player.assists}</td>
-                <td>{player.creepScore}</td>
-                <td>{player.currentHealth}</td>
-                <td>{player.maxHealth}</td>
+                <th>Time</th>
+                <th>Gold Total</th>
+                <th>Inibidores</th>
+                <th>Torres</th>
+                <th>Barons</th>
+                <th>Kills</th>
+                <th>Dragões</th>
               </tr>
-            ))}
-            <hr />
-            {frame.redTeam.participants.map(player => (
+            </thead>
+            <tbody>
               <tr>
-                <td style={{color: 'red'}}>{game.gameMetadata.redTeamMetadata.participantMetadata[player.participantId - 6].championId}</td>
-                <td>{player.totalGold}</td>
-                <td>{player.level}</td>
-                <td>{player.kills}</td>
-                <td>{player.deaths}</td>
-                <td>{player.assists}</td>
-                <td>{player.creepScore}</td>
-                <td>{player.currentHealth}</td>
-                <td>{player.maxHealth}</td>
+                <td style={{color: 'blue', fontWeight: 'bold'}}>Azul</td>
+                <td>{frame.blueTeam.totalGold}</td>
+                <td>{frame.blueTeam.inhibitors}</td>
+                <td>{frame.blueTeam.towers}</td>
+                <td>{frame.blueTeam.barons}</td>
+                <td style={{ color: blueTeamKillsColor, fontWeight: 'bold' }}>{frame.blueTeam.totalKills}</td>
+                <td>{frame.blueTeam.dragons.join()}</td>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </>
+              <tr>
+                <td style={{color: 'red', fontWeight: 'bold'}}>Vermelho</td>
+                <td>{frame.redTeam.totalGold}</td>
+                <td>{frame.redTeam.inhibitors}</td>
+                <td>{frame.redTeam.towers}</td>
+                <td>{frame.redTeam.barons}</td>
+                <td style={{ color: redTeamKillsColor, fontWeight: 'bold' }}>{frame.redTeam.totalKills}</td>
+                <td>{frame.redTeam.dragons.join()}</td>
+              </tr>
+            </tbody>
+          </Table>
+
+          <Table style={{ marginTop: '62px' }} striped bordered hover>
+            <thead>
+              <tr>
+                <td>Campeão</td>
+                <td>Gold total</td>
+                <td>Level</td>
+                <td>Kills</td>
+                <td>Mortes</td>
+                <td>Assists</td>
+                <td>CS</td>
+                <td>HP atual</td>
+                <td>HP máximo</td>
+              </tr>
+            </thead>
+            <tbody>
+              {frame.blueTeam.participants.map(player => (
+                <tr>
+                  <td style={{ color: 'blue' }}>{game.gameMetadata.blueTeamMetadata.participantMetadata[player.participantId - 1].championId}</td>
+                  <td>{player.totalGold}</td>
+                  <td>{player.level}</td>
+                  <td>{player.kills}</td>
+                  <td>{player.deaths}</td>
+                  <td>{player.assists}</td>
+                  <td>{player.creepScore}</td>
+                  <td>
+                    <HealthBar percentage={this.getPercentage(player.maxHealth, player.currentHealth)} />
+                  </td>
+                  <td>{player.maxHealth}</td>
+                </tr>
+              ))}
+              <hr />
+              {frame.redTeam.participants.map(player => (
+                <tr>
+                  <td style={{ color: 'red' }}>{game.gameMetadata.redTeamMetadata.participantMetadata[player.participantId - 6].championId}</td>
+                  <td>{player.totalGold}</td>
+                  <td>{player.level}</td>
+                  <td>{player.kills}</td>
+                  <td>{player.deaths}</td>
+                  <td>{player.assists}</td>
+                  <td>{player.creepScore}</td>
+                  <td>
+                    <HealthBar percentage={this.getPercentage(player.maxHealth, player.currentHealth)} />
+                  </td>
+                  <td>{player.maxHealth}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </>
       )}
     </>
   }
