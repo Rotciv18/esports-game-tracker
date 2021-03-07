@@ -46,8 +46,6 @@ class Game extends Component {
   }
 
   getPercentage(initialValue, finalValue) {
-    console.log(`${finalValue} ----- ${initialValue}`)
-    // console.log('Returning ' + Math.trunc(((finalValue - initialValue) / initialValue * 100) * - 1));
     return Math.trunc(((finalValue - initialValue) / initialValue * 100) + 100);
   }
 
