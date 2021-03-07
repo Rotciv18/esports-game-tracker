@@ -20,10 +20,8 @@ class Game extends Component {
 
     if (startingDate) {
       getGameRequest(id, startingDate);
-      console.log(startingDate);
     } else {
       getGameRequest(id, date);
-      console.log(date.toISOString());
     }
 
     setInterval(this.updateData, 2000);
@@ -40,15 +38,14 @@ class Game extends Component {
 
     if (startingDate) {
       getGameRequest(id, startingDate);
-      console.log(startingDate);
+      console.log(`Buscando em ${format(startingDate, 'hh:mm:ss')}`);
     } else {
       getGameRequest(id, date);
-      console.log(date.toISOString());
     }
   }
 
   render() {
-    const { game, isLoading } = this.props;
+    const { game } = this.props;
     const frame = game.frames ? game.frames[game.frames.length - 1] : undefined;
 
     return <> 
@@ -157,9 +154,7 @@ class Game extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  gameDuck: state.game,
   game: state.game.game,
-  isLoading: state.game.isLoading,
   startingDate: state.game.startingDate
 });
 

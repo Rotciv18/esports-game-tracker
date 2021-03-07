@@ -1,4 +1,5 @@
 import { createActions, createReducer } from 'reduxsauce';
+import { parseISO } from 'date-fns';
 
 export const { Types, Creators } = createActions({
   getGameRequest: ['id', 'startingTime'],
@@ -9,7 +10,7 @@ export const { Types, Creators } = createActions({
 const INITIAL_STATE = {
   game: {},
   isLoading: true,
-  startingDate: null
+  startingDate: null,
 };
 
 const getGameRequest = (state = INITIAL_STATE) => ({
@@ -17,12 +18,18 @@ const getGameRequest = (state = INITIAL_STATE) => ({
   isLoading: false,
 });
 
-const getGameSuccess = (state = INITIAL_STATE, action) => ({
-  ...state,
-  isLoading: false,
-  game: action.data,
-  startingDate: null
-});
+const getGameSuccess = (state = INITIAL_STATE, action) => {
+  state.startingDate.setSeconds(state.startingDate.getSeconds() + 10);
+  const startingDate = state.startingDate;
+
+  return {
+    ...state,
+    isLoading: false,
+    game: action.data,
+    startingDate
+  }
+
+};
 
 const getGameFailure = (state = INITIAL_STATE, action) => ({
   ...state,
