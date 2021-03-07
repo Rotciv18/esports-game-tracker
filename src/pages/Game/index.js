@@ -105,7 +105,7 @@ class Game extends Component {
                 <td>Mortes</td>
                 <td>Assists</td>
                 <td>CS</td>
-                <td>HP atual</td>
+                <td style={{width: '300px'}}>HP atual</td>
                 <td>HP máximo</td>
               </tr>
             </thead>
